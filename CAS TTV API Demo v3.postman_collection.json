@@ -15,7 +15,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"type": "text/javascript",
+								"id": "9f6bed28-e84f-47ee-8870-fd79413def2f",
 								"exec": [
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
 									"tests[\"Response contains auth token\"] = responseBody.has(\"token\");",
@@ -23,7 +23,8 @@
 									"var data = JSON.parse(responseBody);",
 									"tests[\"Auth token is not null\"] = data.token !== \"\";",
 									"postman.setEnvironmentVariable(\"token\", data.token);"
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -37,7 +38,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\": \"{{username}}\",\n\t\"password\": \"{{password}}\",\n\t\"host\": \"127.0.0.1\",\n\t\"refreshToken\": \"{{refreshToken}}\"\n}"
+							"raw": "{\n\t\"refreshToken\": \"{{refreshToken}}\"\n}"
 						},
 						"url": {
 							"raw": "{{url-home}}/iaas/login",
@@ -100,7 +101,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cloudAccountType\": \"azure\",\n    \"privateKeyId\": \"{{azurePrivateKeyId}}\",\n    \"privateKey\": \"{{azurePrivateKey}}\",\n    \"cloudAccountProperties\": {\n        \"userLink\" : \"{{azureSubscriptionId}}\",\n        \"azureTenantId\" : \"{{azureTenantId}}\"\n    },\n    \"regionIds\": [\n        \"eastus\"\n    ],\n    \"createDefaultZones\" : \"true\",\n    \"name\": \"azure-b30\"\n}"
+							"raw": "{\n    \"cloudAccountType\": \"azure\",\n    \"privateKeyId\": \"{{azurePrivateKeyId}}\",\n    \"privateKey\": \"{{azurePrivateKey}}\",\n    \"cloudAccountProperties\": {\n        \"userLink\" : \"{{azureSubscriptionId}}\",\n        \"azureTenantId\" : \"{{azureTenantId}}\"\n    },\n    \"regionIds\": [\n        \"{{azureRegionId}}\"\n    ],\n    \"createDefaultZones\" : \"true\",\n    \"name\": \"{{azureZoneName}}\"\n}"
 						},
 						"url": {
 							"raw": "{{url-home}}/iaas/cloud-accounts",
@@ -131,7 +132,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cloudAccountType\": \"aws\",\n    \"privateKeyId\": \"{{awsPrivateKeyId}}\",\n    \"privateKey\": \"{{awsPrivateKey}}\",\n    \"cloudAccountProperties\": {\n        \n    },\n    \"regionIds\": [\n        \"us-east-1\"\n    ],\n    \"createDefaultZones\" : \"true\",\n    \"name\": \"aws-b30\"\n}"
+							"raw": "{\n    \"cloudAccountType\": \"aws\",\n    \"privateKeyId\": \"{{awsPrivateKeyId}}\",\n    \"privateKey\": \"{{awsPrivateKey}}\",\n    \"cloudAccountProperties\": {\n        \n    },\n    \"regionIds\": [\n        \"{{awsRegionId}}\"\n    ],\n    \"createDefaultZones\" : \"true\",\n    \"name\": \"{{awsZoneName}}\"\n}"
 						},
 						"url": {
 							"raw": "{{url-home}}/iaas/cloud-accounts",
@@ -158,12 +159,12 @@
 									"",
 									"for ( i=0; i<jsonData.content.length; i++) {",
 									"    if (jsonData.content[i].name.has(\"us-east-1\")) {",
-									"        postman.clearEnvironmentVariable(\"awsZoneLink\");",
-									"        postman.setEnvironmentVariable(\"awsZoneLink\", jsonData.content[i].id);",
+									"        postman.clearEnvironmentVariable(\"awsZoneId\");",
+									"        postman.setEnvironmentVariable(\"awsZoneId\", jsonData.content[i].id);",
 									"    }",
 									"    if (jsonData.content[i].name.has(\"East US\")) {",
-									"        postman.clearEnvironmentVariable(\"azureZoneLink\");",
-									"        postman.setEnvironmentVariable(\"azureZoneLink\", jsonData.content[i].id);",
+									"        postman.clearEnvironmentVariable(\"azureZoneId\");",
+									"        postman.setEnvironmentVariable(\"azureZoneId\", jsonData.content[i].id);",
 									"    }",
 									"}"
 								],
@@ -212,7 +213,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\" : \"Rainpole Corp Communications\",\n\t\"description\" : \"API Generated Project\",\n    \"administrators\" : [\n        {\n            \"email\" : \"{{projectAdmins}}\"\n        }\n    ],\n    \"members\" : [\n    \t{\n    \t\t\"email\" : \"{{projectUsers}}\"\n    \t}\n    ],\n    \"zoneAssignmentConfigurations\":[\n\t    {\n\t    \t\"zoneId\": \"{{awsZoneLink}}\",\n\t    \t\"priority\": 1\n\t    }, \n\t    {\n\t    \t\"zoneId\": \"{{azureZoneLink}}\",\n\t    \t\"priority\": 2\n\t    }\n    ]\n}"
+							"raw": "{\n\t\"name\" : \"Rainpole Corp Communications\",\n\t\"description\" : \"API Generated Project\",\n    \"administrators\" : [\n        {\n            \"email\" : \"{{projectAdmins}}\"\n        }\n    ],\n    \"members\" : [\n    \t{\n    \t\t\"email\" : \"{{projectUsers}}\"\n    \t}\n    ],\n    \"zoneAssignmentConfigurations\":[\n\t    {\n\t    \t\"zoneId\": \"{{awsZoneId}}\",\n\t    \t\"priority\": 1\n\t    }, \n\t    {\n\t    \t\"zoneId\": \"{{azureZoneId}}\",\n\t    \t\"priority\": 2\n\t    }\n    ]\n}"
 						},
 						"url": {
 							"raw": "{{url-home}}/iaas/projects",
@@ -248,14 +249,14 @@
 							"raw": "{\n    \"name\": \"aws-b30 / us-east-1\",\n    \"tags\": [\n        {\n            \"key\": \"env\",\n            \"value\": \"dev\"\n        }\n    ]\n}"
 						},
 						"url": {
-							"raw": "{{url-home}}/iaas/zones/{{awsZoneLink}}",
+							"raw": "{{url-home}}/iaas/zones/{{awsZoneId}}",
 							"host": [
 								"{{url-home}}"
 							],
 							"path": [
 								"iaas",
 								"zones",
-								"{{awsZoneLink}}"
+								"{{awsZoneId}}"
 							]
 						}
 					},
@@ -282,14 +283,14 @@
 							"raw": "{\n    \"name\": \"azure-b30 / East US\",\n    \"tags\": [\n        {\n            \"key\": \"env\",\n            \"value\": \"test\"\n        }\n    ]\n}"
 						},
 						"url": {
-							"raw": "{{url-home}}/iaas/zones/{{azureZoneLink}}",
+							"raw": "{{url-home}}/iaas/zones/{{azureZoneId}}",
 							"host": [
 								"{{url-home}}"
 							],
 							"path": [
 								"iaas",
 								"zones",
-								"{{azureZoneLink}}"
+								"{{azureZoneId}}"
 							]
 						}
 					},
@@ -429,8 +430,8 @@
 									"",
 									"for ( i=0; i<jsonData.length; i++) {",
 									"    if (jsonData[i].name.has(\"eastus\")) {",
-									"        postman.clearEnvironmentVariable(\"azureZoneLink\");",
-									"        postman.setEnvironmentVariable(\"azureZoneLink\", jsonData[i].id);",
+									"        postman.clearEnvironmentVariable(\"azureZoneId\");",
+									"        postman.setEnvironmentVariable(\"azureZoneId\", jsonData[i].id);",
 									"    }",
 									"}"
 								]
@@ -675,7 +676,7 @@
 									"",
 									"for ( i=0; i<jsonData.content.length; i++) {",
 									"    if (jsonData.content[i].name.has(\"appnet-public-dev\")) {",
-									"        postman.setEnvironmentVariable(\"azureNetworkLink\", jsonData.content[i].id);",
+									"        postman.setEnvironmentVariable(\"azureNetworkId\", jsonData.content[i].id);",
 									"    }",
 									"}"
 								],
@@ -726,7 +727,7 @@
 									"",
 									"for ( i=0; i<jsonData.content.length; i++) {",
 									"    if (jsonData.content[i].name.has(\"appnet-public-dev\")) {",
-									"        postman.setEnvironmentVariable(\"awsNetworkLink\", jsonData.content[i].id);",
+									"        postman.setEnvironmentVariable(\"awsNetworkId\", jsonData.content[i].id);",
 									"    }",
 									"}"
 								],
@@ -781,7 +782,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Azure Network Profile\",\n  \"description\": \"Azure Network Profile\",\n  \"fabricNetworkIds\": [\n    \"{{azureNetworkLink}}\"\n  ],\n  \"regionId\": \"{{azureRegionLink}}\",\n  \"tags\": [\n    {\n      \"key\": \"env\",\n      \"value\": \"test\"\n    }\n    ]\n}"
+							"raw": "{\n  \"name\": \"Azure Network Profile\",\n  \"description\": \"Azure Network Profile\",\n  \"fabricNetworkIds\": [\n    \"{{azureNetworkId}}\"\n  ],\n  \"regionId\": \"{{azureRegionLink}}\",\n  \"tags\": [\n    {\n      \"key\": \"env\",\n      \"value\": \"test\"\n    }\n    ]\n}"
 						},
 						"url": {
 							"raw": "{{url-home}}/iaas/network-profiles",
@@ -812,7 +813,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"AWS Network Profile\",\n  \"description\": \"AWS Network Profile\",\n  \"fabricNetworkIds\": [\n    \"{{awsNetworkLink}}\"\n  ],\n  \"regionId\": \"{{awsRegionLink}}\",\n  \"tags\": [\n    {\n      \"key\": \"env\",\n      \"value\": \"dev\"\n    }\n    ]\n}"
+							"raw": "{\n  \"name\": \"AWS Network Profile\",\n  \"description\": \"AWS Network Profile\",\n  \"fabricNetworkIds\": [\n    \"{{awsNetworkId}}\"\n  ],\n  \"regionId\": \"{{awsRegionLink}}\",\n  \"tags\": [\n    {\n      \"key\": \"env\",\n      \"value\": \"dev\"\n    }\n    ]\n}"
 						},
 						"url": {
 							"raw": "{{url-home}}/iaas/network-profiles",
@@ -848,14 +849,14 @@
 							"raw": "{\n    \"tags\": [\n        {\n            \"key\": \"type\",\n            \"value\": \"public-net\"\n        }\n    ]\n}"
 						},
 						"url": {
-							"raw": "{{url-home}}/iaas/fabric-networks/{{awsNetworkLink}}",
+							"raw": "{{url-home}}/iaas/fabric-networks/{{awsNetworkId}}",
 							"host": [
 								"{{url-home}}"
 							],
 							"path": [
 								"iaas",
 								"fabric-networks",
-								"{{awsNetworkLink}}"
+								"{{awsNetworkId}}"
 							]
 						}
 					},
@@ -882,14 +883,14 @@
 							"raw": "{\n    \"tags\": [\n        {\n            \"key\": \"type\",\n            \"value\": \"public-net\"\n        }\n    ]\n}"
 						},
 						"url": {
-							"raw": "{{url-home}}/iaas/fabric-networks/{{azureNetworkLink}}",
+							"raw": "{{url-home}}/iaas/fabric-networks/{{azureNetworkId}}",
 							"host": [
 								"{{url-home}}"
 							],
 							"path": [
 								"iaas",
 								"fabric-networks",
-								"{{azureNetworkLink}}"
+								"{{azureNetworkId}}"
 							]
 						}
 					},
@@ -906,7 +907,7 @@
 									"var jsonData = JSON.parse(responseBody);",
 									"",
 									"for ( i=0; i<jsonData.content.length; i++) {",
-									"        postman.setEnvironmentVariable(\"storageAccountLink\", jsonData.content[i].id);",
+									"        postman.setEnvironmentVariable(\"storageAccountId\", jsonData.content[i].id);",
 									"}"
 								],
 								"type": "text/javascript"
@@ -985,7 +986,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"defaultItem\": false,\n\t\"supportsEncryption\": true,\n\t\"storageAccountId\": \"{{storageAccountLink}}\",\n\t\"osDiskCaching\": \"ReadOnly\",\n\t\"dataDiskCaching\": \"ReadWrite\",\n\t\"name\": \"Storage Account\",\n\t\"regionId\": \"{{azureRegionLink}}\"\n}"
+							"raw": "{\n\t\"defaultItem\": false,\n\t\"supportsEncryption\": true,\n\t\"storageAccountId\": \"{{storageAccountId}}\",\n\t\"osDiskCaching\": \"ReadOnly\",\n\t\"dataDiskCaching\": \"ReadWrite\",\n\t\"name\": \"Storage Account\",\n\t\"regionId\": \"{{azureRegionLink}}\"\n}"
 						},
 						"url": {
 							"raw": "{{url-home}}/iaas/storage-profiles-azure",
