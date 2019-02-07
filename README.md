@@ -1,4 +1,4 @@
-# Cloud Automation Services Postman Collection
+# VMware Cloud Automation Services Postman Collection
 
 This is a collection of REST API calls for use with Postman. We have included the following items:
 * The actual Postman collection
