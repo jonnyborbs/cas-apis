@@ -1,4 +1,4 @@
-# Cloud Automation Services Postman Collection
+# VMware Cloud Automation Services Postman Collection
 
 This is a collection of REST API calls for use with Postman. We have included the following items:
 * The actual Postman collection
@@ -9,7 +9,7 @@ Import both of these into Postman to get started. You will need to obtin a Cloud
 ## Required Variables
 The environment JSON includes several variables that must be completed prior to executing any of the calls, including:
 * refreshToken: Where you should input the API token obtained from Cloud Services
-* url-home: The base URL of your Cloud Automation install. For Cloud Services, this is pre-filled. For vRA 8, you will need to update it it.
+* url-home: The base URL of your Cloud Automation install. For Cloud Services, this is pre-filled.
 * azureSubscriptionId: Your Azure subscription ID
 * azureTenantId: Your Azure Tenant ID
 * azurePrivateKeyId: The Application ID used to authenticate to your Azure account
