@@ -162,7 +162,7 @@
 									"        postman.clearEnvironmentVariable(\"awsZoneLink\");",
 									"        postman.setEnvironmentVariable(\"awsZoneLink\", jsonData.content[i].id);",
 									"    }",
-									"    if (jsonData.content[i].name.has(\"East US\")) {",
+									"    if (jsonData.content[i].name.has(\"eastus\")) {",
 									"        postman.clearEnvironmentVariable(\"azureZoneLink\");",
 									"        postman.setEnvironmentVariable(\"azureZoneLink\", jsonData.content[i].id);",
 									"    }",
